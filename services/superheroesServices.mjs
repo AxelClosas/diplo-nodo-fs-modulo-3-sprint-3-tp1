@@ -16,4 +16,6 @@ export async function obtenerSuperheroesMayoresDe30() {
   return await superHeroRepository.obtenerMayoresDe30()
 }
 
-  
+export async function agregarSuperheroe(superheroe) {
+  return await superHeroRepository.agregar(superheroe)
+}

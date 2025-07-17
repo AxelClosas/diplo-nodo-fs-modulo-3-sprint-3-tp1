@@ -1,4 +1,6 @@
-import { obtenerSuperheroePorId, obtenerTodosLosSuperheroes, buscarSuperheroesPorAtributo, obtenerSuperheroesMayoresDe30 } from '../services/superheroesServices.mjs'
+import { obtenerSuperheroePorId, obtenerTodosLosSuperheroes, buscarSuperheroesPorAtributo, obtenerSuperheroesMayoresDe30, agregarSuperheroe } from '../services/superheroesServices.mjs'
+
+import SuperHero from '../models/SuperHero.mjs'
 
 import { renderizarSuperheroe, renderizarListaSuperheroes } from '../views/responseView.mjs'
 
@@ -58,3 +60,17 @@ export async function obtenerSuperheroesMayoresDe30Controller(req, res) {
   }
 }
 
+export async function agregarSuperheroeController(req, res) {
+  try {
+    const { id, nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador } = req.body
+    const nuevoSuperHeroe = { id, nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador }
+    const result = agregarSuperheroe(nuevoSuperHeroe)
+    result
+      .then(superheroe => console.log('Creado el superheroe:', superheroe))
+      .catch(
+        error => { throw new Error("No se pudo crear el superheroe:", error)}
+      )
+  } catch (error) {
+    res.status(400).send( { mensaje: 'Error al agregar el Superheroe', error: error.message })
+  }
+}

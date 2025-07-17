@@ -14,6 +14,10 @@ class IRepository {
   obtenerMayoresDe30() {
     throw new Error("Método 'obtenerMayoresDe30()' no implementado")
   }
+
+  agregar(superheroe) {
+    throw new Error("Método 'agregar()' no implementado")
+  }
 }
 
 export default IRepository

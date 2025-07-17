@@ -21,6 +21,10 @@ class SuperHeroRepository extends IRepository {
       $expr: { $gte: [{ $size: '$poderes' }, 2] }
     })
   }
+
+  async agregar(superheroe) {
+    return await SuperHero.create(superheroe)
+  }
 }
 
 export default new SuperHeroRepository();

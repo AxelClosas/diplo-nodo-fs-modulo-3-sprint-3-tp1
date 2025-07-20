@@ -19,3 +19,7 @@ export async function obtenerSuperheroesMayoresDe30() {
 export async function agregarSuperheroe(superheroe) {
   return await superHeroRepository.agregar(superheroe)
 }
+
+export async function actualizarSuperheroePorId(id, atributos) {
+  return await superHeroRepository.actualizar(id, atributos)
+}

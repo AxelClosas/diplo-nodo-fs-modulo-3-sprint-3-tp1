@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { obtenerSuperheroePorIdController, obtenerTodosLosSuperheroesController, buscarSuperheroesPorAtributoController, obtenerSuperheroesMayoresDe30Controller, agregarSuperheroeController } from '../controllers/superheroesController.mjs'
+import { obtenerSuperheroePorIdController, obtenerTodosLosSuperheroesController, buscarSuperheroesPorAtributoController, obtenerSuperheroesMayoresDe30Controller, agregarSuperheroeController, actualizarSuperheroePorIdController } from '../controllers/superheroesController.mjs'
 
 const router = express.Router()
 
@@ -10,5 +10,6 @@ router.get('/heroes/:id', obtenerSuperheroePorIdController)
 router.get('/heroes/:atributo/:valor', buscarSuperheroesPorAtributoController)
 
 router.post('/heroes', agregarSuperheroeController)
+router.put('/heroes/:id', actualizarSuperheroePorIdController)
 
 export default router

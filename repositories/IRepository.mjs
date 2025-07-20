@@ -18,6 +18,10 @@ class IRepository {
   agregar(superheroe) {
     throw new Error("Método 'agregar()' no implementado")
   }
+
+  actualizar(id, atributos) {
+    throw new Error("Método 'actualizar()' no implementado")
+  }
 }
 
 export default IRepository

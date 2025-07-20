@@ -1,6 +1,4 @@
-import { obtenerSuperheroePorId, obtenerTodosLosSuperheroes, buscarSuperheroesPorAtributo, obtenerSuperheroesMayoresDe30, agregarSuperheroe } from '../services/superheroesServices.mjs'
-
-import SuperHero from '../models/SuperHero.mjs'
+import { obtenerSuperheroePorId, obtenerTodosLosSuperheroes, buscarSuperheroesPorAtributo, obtenerSuperheroesMayoresDe30, agregarSuperheroe, actualizarSuperheroePorId } from '../services/superheroesServices.mjs'
 
 import { renderizarSuperheroe, renderizarListaSuperheroes } from '../views/responseView.mjs'
 
@@ -62,15 +60,36 @@ export async function obtenerSuperheroesMayoresDe30Controller(req, res) {
 
 export async function agregarSuperheroeController(req, res) {
   try {
+    const buscarId = await obtenerSuperheroePorId(req.body.id)
+    if (buscarId !== null) {
+      throw new Error('No se puede agregar un superhéroe con el mismo ID.')
+    }
+    console.log(`Resultado de ObtenerSuperheroePorId: ${buscarId}`)
     const { id, nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador } = req.body
     const nuevoSuperHeroe = { id, nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador }
-    const result = agregarSuperheroe(nuevoSuperHeroe)
-    result
-      .then(superheroe => console.log('Creado el superheroe:', superheroe))
-      .catch(
-        error => { throw new Error("No se pudo crear el superheroe:", error)}
-      )
+    const superheroe = await agregarSuperheroe(nuevoSuperHeroe)
+    
+    const superheroeFormateado = renderizarSuperheroe(superheroe)
+    res.status(201).json(superheroeFormateado)
+    
   } catch (error) {
-    res.status(400).send( { mensaje: 'Error al agregar el Superheroe', error: error.message })
+    res.status(409).send( { mensaje: 'Error al agregar el Superheroe', error: error.message })
+  }
+}
+
+export async function actualizarSuperheroePorIdController(req, res) {
+  try {
+    const buscarId = await obtenerSuperheroePorId(req.params.id)
+    if (buscarId === null) {
+      throw new Error('No se encontró el Superhéroe con ID:', req.params.id)
+    }
+    const { id } = req.params
+    const atributosSuper = req.body
+    const superheroe = await actualizarSuperheroePorId(id, atributosSuper)
+    const superheroeFormateado = renderizarSuperheroe(superheroe)
+    res.status(200).json(superheroeFormateado)
+
+  } catch (error) {
+    res.status(404).send({mensaje: 'Error al actualizar el Superhéroe', error: error.message})
   }
 }

@@ -25,6 +25,10 @@ class SuperHeroRepository extends IRepository {
   async agregar(superheroe) {
     return await SuperHero.create(superheroe)
   }
+
+  async actualizar(id, atributos) {
+    return await SuperHero.findOneAndUpdate({id: id}, atributos, { new: true })
+  }
 }
 
 export default new SuperHeroRepository();

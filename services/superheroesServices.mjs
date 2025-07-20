@@ -23,3 +23,11 @@ export async function agregarSuperheroe(superheroe) {
 export async function actualizarSuperheroePorId(id, atributos) {
   return await superHeroRepository.actualizar(id, atributos)
 }
+
+export async function eliminarSuperheroePorId(id) {
+  return await superHeroRepository.eliminarPorId(id)
+}
+
+export async function eliminarSuperheroePorNombreSuperheroe(nombre) {
+  return await superHeroRepository.eliminarPorNombre(nombre)
+}

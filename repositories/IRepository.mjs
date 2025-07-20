@@ -22,6 +22,10 @@ class IRepository {
   actualizar(id, atributos) {
     throw new Error("Método 'actualizar()' no implementado")
   }
+
+  eliminar(id) {
+    throw new Error("Método 'eliminar()' no implementado")
+  }
 }
 
 export default IRepository

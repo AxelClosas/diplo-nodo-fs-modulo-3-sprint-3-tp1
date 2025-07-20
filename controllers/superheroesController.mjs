@@ -1,4 +1,4 @@
-import { obtenerSuperheroePorId, obtenerTodosLosSuperheroes, buscarSuperheroesPorAtributo, obtenerSuperheroesMayoresDe30, agregarSuperheroe, actualizarSuperheroePorId } from '../services/superheroesServices.mjs'
+import { obtenerSuperheroePorId, obtenerTodosLosSuperheroes, buscarSuperheroesPorAtributo, obtenerSuperheroesMayoresDe30, agregarSuperheroe, actualizarSuperheroePorId, eliminarSuperheroePorId, eliminarSuperheroePorNombreSuperheroe } from '../services/superheroesServices.mjs'
 
 import { renderizarSuperheroe, renderizarListaSuperheroes } from '../views/responseView.mjs'
 
@@ -64,7 +64,6 @@ export async function agregarSuperheroeController(req, res) {
     if (buscarId !== null) {
       throw new Error('No se puede agregar un superhéroe con el mismo ID.')
     }
-    console.log(`Resultado de ObtenerSuperheroePorId: ${buscarId}`)
     const { id, nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador } = req.body
     const nuevoSuperHeroe = { id, nombreSuperHeroe, nombreReal, edad, planetaOrigen, debilidad, poderes, aliados, enemigos, creador }
     const superheroe = await agregarSuperheroe(nuevoSuperHeroe)
@@ -79,11 +78,11 @@ export async function agregarSuperheroeController(req, res) {
 
 export async function actualizarSuperheroePorIdController(req, res) {
   try {
-    const buscarId = await obtenerSuperheroePorId(req.params.id)
-    if (buscarId === null) {
-      throw new Error('No se encontró el Superhéroe con ID:', req.params.id)
-    }
     const { id } = req.params
+    const buscarId = await obtenerSuperheroePorId(id)
+    if (buscarId === null) {
+      throw new Error(`No se encontró el Superhéroe con ID: ${id}`)
+    }
     const atributosSuper = req.body
     const superheroe = await actualizarSuperheroePorId(id, atributosSuper)
     const superheroeFormateado = renderizarSuperheroe(superheroe)
@@ -91,5 +90,36 @@ export async function actualizarSuperheroePorIdController(req, res) {
 
   } catch (error) {
     res.status(404).send({mensaje: 'Error al actualizar el Superhéroe', error: error.message})
+  }
+}
+
+export async function eliminarSuperheroePorIdController(req, res) {
+  try {
+    const { id } = req.params
+    const buscarId = await obtenerSuperheroePorId(id)
+    if (buscarId === null) {
+      throw new Error(`No se encontró el Superhéroe con ID: ${id}`)
+    }
+    const superheroeEliminado = await eliminarSuperheroePorId(id)
+    const superheroeFormateado = renderizarSuperheroe(superheroeEliminado)
+    res.status(200).json(superheroeFormateado)
+
+  } catch (error) {
+    res.status(404).send({mensaje: 'Error al eliminar el Superhéroe', error: error.message})
+  }
+}
+
+export async function eliminarSuperheroePorNombreSuperheroeController(req, res) {
+    try {
+    const { nombreSuperHeroe } = req.params
+    const superheroeEliminado = await eliminarSuperheroePorNombreSuperheroe(nombreSuperHeroe)
+    if (superheroeEliminado === null) {
+      throw new Error(`No se encontró el Superhéroe con nombre: ${nombreSuperHeroe}`)
+    }
+    const superheroeFormateado = renderizarSuperheroe(superheroeEliminado)
+    res.status(200).json(superheroeFormateado)
+
+  } catch (error) {
+    res.status(404).send({mensaje: 'Error al eliminar el Superhéroe', error: error.message})
   }
 }
